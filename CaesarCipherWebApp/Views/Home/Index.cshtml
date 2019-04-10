@@ -1,0 +1,55 @@
+﻿@model CipherViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>Шифр Цезаря</h1>
+            <span class="font-weight-lighter">
+                Калькулятор шифрует входной текст на русском языке всеми возможными комбинациями шифра Цезаря. Неалфавитные символы (пробелы, знаки препинания, цифры) — не преобразуются.
+            </span>
+            <br />
+            <br />
+            <p class="">
+                Шифр Цезаря - один из наиболее древнейших известных шифров. Схема шифрования очень проста — используется сдвиг буквы алфавита на фиксированное число позиций. Используемое преобразование обычно обозначают как ROTN, где N — сдвиг, ROT — сокращение от слова ROTATE, в данном случае «циклический сдвиг».
+
+                Алфавит действительно зацикливается, то есть буквы в конце алфавита преобразуются в буквы начала алфавита. Например, обозначение ROT2 обозначает сдвиг на 2 позиции, то есть, «а» превращается в «в», «б» в «г», и так далее, и в конце «ю» превращается в «а» а «я» — в «б». Число разных преобразований конечно и зависит от длины алфавита. Для русского языка возможно 32 разных преобразования (преобразования ROT0 и ROT33 сохраняют исходный текст, а дальше начинаются уже повторения). В связи с этим шифр является крайне слабым и исходный текст можно восстановить просто проверив все возможные преобразования.
+            </p>
+        </div>
+        <br />
+        <br />
+        <div class="container">
+            @* enctype="multipart/form-data" *@
+            <form asp-area="" asp-action="Index" asp-controller="Home" role="form" method="post">
+                @*<div class="validation" asp-validation-summary="ModelOnly" />*@
+                <div class="form-group row">
+                    @Html.TextAreaFor(m => m.TextIn, new { @class = "form-control", @rows = "5", @placeholder = "Введите текст" })
+                    
+                </div>
+                <div class="form-group">
+                    <label for="sel1">Выберите значение сдвига:</label>
+                    <select asp-for="Shift" class="form-control" id="sel1">
+                        @for (int i = 1; i <= 32; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group ">
+                    @{
+                        foreach (var sex in Model.Actions)
+                        {
+                            <div class="form-check-inline">
+                                <label> @Html.RadioButtonFor(model => model.ActionType, sex.Name) @sex.Name </label>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary text-center" value="Преобразовать" />
+                </div>
+                <br />
+
+            </form>
+        </div>
+    </div>
+</div>
